@@ -170,10 +170,13 @@ while true; do
             echo -e "${YELLOW}TAG нужен только для @MTProxybot. Если нет — просто Enter.${NC}"
             read -p "Введите TAG: " p_tag; MTP_TAG=${p_tag:-""}
             
-            sudo bash -c "cat > $CONFIG_FILE" <<EOF
-MTP_IP="$MTP_IP"
-MTP_PORT="$MTP_PORT"
-MTP_TAG="$MTP_TAG"
+            printf -v MTP_IP_ESC '%q' "$MTP_IP"
+            printf -v MTP_PORT_ESC '%q' "$MTP_PORT"
+            printf -v MTP_TAG_ESC '%q' "$MTP_TAG"
+            sudo tee "$CONFIG_FILE" > /dev/null <<EOF
+MTP_IP=$MTP_IP_ESC
+MTP_PORT=$MTP_PORT_ESC
+MTP_TAG=$MTP_TAG_ESC
 EOF
             sudo ufw allow $MTP_PORT/tcp &>/dev/null
             sync_mtp

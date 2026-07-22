@@ -104,8 +104,9 @@ function configure_ripe_key {
 
     read -p "Введите новый ключ (Enter — оставить без изменений): " NEW_KEY
     if [[ -n "$NEW_KEY" ]]; then
+        printf -v NEW_KEY_ESC '%q' "$NEW_KEY"
         {
-            echo "RIPE_API_KEY=\"$NEW_KEY\""
+            echo "RIPE_API_KEY=$NEW_KEY_ESC"
         } > "$CENSORCHECK_CONFIG_FILE"
         chmod 600 "$CENSORCHECK_CONFIG_FILE"
         echo -e "${GREEN}✅ Ключ сохранён в $CENSORCHECK_CONFIG_FILE${NC}"
