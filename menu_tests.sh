@@ -128,17 +128,6 @@ function run_censorcheck {
     fi
     chmod +x "$script" 2>/dev/null
 
-    if [[ "$mode" == "dpi" || "$mode" == "all" ]]; then
-        mkdir -p "$CENSORCHECK_CONFIG_DIR"
-        if [[ ! -f "$CENSORCHECK_CONFIG_FILE" ]]; then
-            echo -e "${YELLOW}⚠ RIPE Atlas API-ключ ещё не настроен — радар ТСПУ будет пропущен.${NC}"
-            read -p "Настроить ключ сейчас? [y/N]: " set_now
-            if [[ "$set_now" =~ ^[Yy]$ ]]; then
-                configure_ripe_key
-            fi
-        fi
-    fi
-
     echo -e "${CYAN}>>> Запуск Censorcheck (режим: $mode)...${NC}"
     CENSORCHECK_CONFIG="$CENSORCHECK_CONFIG_FILE" bash "$script" --mode "$mode"
 }
