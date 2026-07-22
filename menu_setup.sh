@@ -309,8 +309,8 @@ function manage_ssl_menu {
 
                 # Автоматически освобождаем 80 порт перед запросом
                 if ss -tlpn | grep -q ":80 "; then
-                    echo -e "${YELLOW}Порт 80 занят! Временно останавливаем службы (nginx/apache/hysteria)...${NC}"
-                    sudo systemctl stop nginx apache2 hysteria-server 2>/dev/null
+                    echo -e "${YELLOW}Порт 80 занят! Временно останавливаем службы (nginx/apache)...${NC}"
+                    sudo systemctl stop nginx apache2 2>/dev/null
                 fi
 
                 echo -e "${CYAN}Запрашиваем сертификат...${NC}"
