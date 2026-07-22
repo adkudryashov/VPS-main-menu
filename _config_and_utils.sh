@@ -13,9 +13,7 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Определите имена и пути
-HYSTERIA_SERVICE="hysteria-server.service"
 SCANER_PATH="/root/RealiTLScanner-linux-64"
-HYSTERIA_CONFIG="/etc/hysteria/config.yaml"
 XUI_SERVICE="x-ui"
 
 # --- ОБЩИЕ УТИЛИТЫ ---
@@ -26,18 +24,7 @@ function get_service_status() {
     sudo systemctl is-active "$1" 2>/dev/null | tr -d '[:space:]'
 }
 
-# 2. Перезапуск службы Hysteria
-function restart_hysteria {
-    echo -e "\n${YELLOW}Перезапуск службы Hysteria...${NC}"
-    sudo systemctl restart $HYSTERIA_SERVICE
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✅ Служба Hysteria успешно перезапущена!${NC}"
-    else
-        echo -e "${RED}❌ Ошибка при перезапуске службы Hysteria. Проверьте логи: journalctl -u $HYSTERIA_SERVICE${NC}"
-    fi
-}
-
-# 3. Вспомогательное меню для старта/стопа сервисов
+# 2. Вспомогательное меню для старта/стопа сервисов
 function manage_service_status_restart {
     SERVICE_NAME=$1
     
@@ -72,7 +59,7 @@ function manage_service_status_restart {
     echo -e "${BLUE}------------------------------------------------------${NC}"
     read -p "Нажмите Enter для возврата в меню..."
 }
-# 4. Получение кода статуса ядра IPv6
+# 3. Получение кода статуса ядра IPv6
 function get_ipv6_status_code() {
     cat /proc/sys/net/ipv6/conf/all/disable_ipv6 2>/dev/null
     if [ $? -ne 0 ]; then
@@ -80,7 +67,7 @@ function get_ipv6_status_code() {
     fi
 }
 
-# 5. Получение публичного IPv6-адреса
+# 4. Получение публичного IPv6-адреса
 function get_public_ipv6 {
     local status_code=$(get_ipv6_status_code)
     
