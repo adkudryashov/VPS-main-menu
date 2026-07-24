@@ -27,7 +27,7 @@ function check_for_updates {
         echo -e "${CYAN}Что нового:${NC}"
         git log HEAD..origin/main --pretty=format:"- %s%n  %b"
         echo -e "${YELLOW}------------------------------------------------------"
-        echo -e "Нажмите ${GREEN}[6]${NC} в меню для автообновления."
+        echo -e "Нажмите ${GREEN}[7]${NC} в меню для автообновления."
         echo -e "======================================================${NC}"
         echo ""
         # ВАЖНО: Пауза, чтобы уведомление не стерлось командой clear
@@ -119,15 +119,26 @@ fi
     # Проверка X-UI
     if systemctl is-active --quiet x-ui; then status_xui="${GREEN}РАБОТАЕТ${NC}"; else status_xui="${RED}Остановлен${NC}"; fi
 
+    # Проверка telemt (MTProto-прокси)
+    if [ ! -f /etc/telemt/telemt.toml ]; then
+        status_telemt="${RED}Не установлен${NC}"
+    elif systemctl is-active --quiet telemt; then
+        status_telemt="${GREEN}РАБОТАЕТ${NC}"
+    else
+        status_telemt="${RED}Остановлен${NC}"
+    fi
+
     echo -e "    🎛️   X-UI:        [$status_xui]"
+    echo -e "    ✈️   telemt:      [$status_telemt]"
 
     echo -e "${BLUE}--- ДЕЙСТВИЯ ---------------------------------------${NC}"
     echo -e "${YELLOW}1) 🎛️   Управление X-UI (Установка/Запуск/Статус)${NC}"
-    echo -e "${GREEN}2) 🧪  Тестирование сервера (Скорость/Блокировки/Сканер)${NC}"
-    echo -e "${GREEN}3) ⚙️   Настройка и оптимизация сервера${NC}"
-    echo -e "${GREEN}4) 🌐  Меню IPv6 (Вкл/Выкл/Статус)${NC}"
-    echo -e "${YELLOW}5) 🛠️   Системные утилиты (htop, ncdu, сеть, очистка)${NC}"
-    echo -e "${CYAN}6) 🔄  ОБНОВИТЬ СКРИПТЫ (с GitHub)${NC}"
+    echo -e "${YELLOW}2) ✈️   Стек telemt / MTProto (self-SNI, панель, MEKO)${NC}"
+    echo -e "${GREEN}3) 🧪  Тестирование сервера (Скорость/Блокировки/Сканер)${NC}"
+    echo -e "${GREEN}4) ⚙️   Настройка и оптимизация сервера${NC}"
+    echo -e "${GREEN}5) 🌐  Меню IPv6 (Вкл/Выкл/Статус)${NC}"
+    echo -e "${YELLOW}6) 🛠️   Системные утилиты (htop, ncdu, сеть, очистка)${NC}"
+    echo -e "${CYAN}7) 🔄  ОБНОВИТЬ СКРИПТЫ (с GitHub)${NC}"
     echo -e "${RED}X) 🚪  Выход в оболочку${NC}"
     echo -e "${BLUE}------------------------------------------------------${NC}"
 }
@@ -141,11 +152,12 @@ while true; do
 
     case $choice in
         1) /usr/local/bin/menu_xui.sh ;;
-        2) /usr/local/bin/menu_tests.sh ;;
-        3) /usr/local/bin/menu_setup.sh ;;
-        4) /usr/local/bin/ipv6-menu ;;
-        5) /usr/local/bin/menu_utils.sh ;;
-        6)
+        2) /usr/local/bin/menu_telemt.sh ;;
+        3) /usr/local/bin/menu_tests.sh ;;
+        4) /usr/local/bin/menu_setup.sh ;;
+        5) /usr/local/bin/ipv6-menu ;;
+        6) /usr/local/bin/menu_utils.sh ;;
+        7)
            echo -e "${YELLOW}>>> Принудительное обновление через Git...${NC}"
            cd /root/VPS-main-menu || exit
            git fetch origin main &>/dev/null

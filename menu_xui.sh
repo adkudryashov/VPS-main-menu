@@ -8,6 +8,20 @@ source /usr/local/bin/_config_and_utils.sh
 
 XUI_PRO_REPO="https://raw.githubusercontent.com/mozaroc/3x-ui-pro/main"
 
+# Установщик и патч 3x-ui-pro очищают /etc/nginx/sites-enabled целиком.
+# Если на сервере поднят стек telemt, его self-SNI vhost живёт в conf.d и
+# это переживает — но vhost ссылается на пути из конфига панели, которые
+# патч мог перегенерировать. Поэтому после обеих операций напоминаем
+# прогнать диагностику.
+function warn_telemt_after_panel_change {
+    if [ -f /etc/telemt/telemt.toml ]; then
+        echo -e "\n${YELLOW}⚠️  На сервере установлен стек telemt.${NC}"
+        echo -e "${YELLOW}    Панель могла перегенерировать свои nginx-конфиги."
+        echo -e "    Проверь маскировку: главное меню -> 'Стек telemt / MTProto'"
+        echo -e "    -> 'Статус и диагностика'. При сбое — 'Восстановить маскировку'.${NC}"
+    fi
+}
+
 function install_xui_pro {
     clear
     echo -e "${CYAN}======================================================${NC}"
@@ -34,12 +48,14 @@ function install_xui_pro {
 
     echo -e "${CYAN}>>> Запуск установки 3x-ui-pro...${NC}"
     bash <(curl -fsSL "$XUI_PRO_REPO/x-ui-latest.sh") "${xui_args[@]}"
+    warn_telemt_after_panel_change
     read -p "Нажмите Enter для продолжения..."
 }
 
 function patch_xui_pro {
     echo -e "${CYAN}>>> Применение патча к текущей установке (без изменения БД)...${NC}"
     bash <(curl -fsSL "$XUI_PRO_REPO/x-ui-patch.sh")
+    warn_telemt_after_panel_change
     read -p "Нажмите Enter для продолжения..."
 }
 

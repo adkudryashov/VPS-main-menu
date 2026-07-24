@@ -37,12 +37,15 @@ chmod +x "$TARGET_DIR"/*.sh 2>/dev/null
 echo -e "${YELLOW}>>> Создание системных ссылок для модулей...${NC}"
 ln -sf "$TARGET_DIR/server-menu" /usr/local/bin/server-menu
 ln -sf "$TARGET_DIR/menu_xui.sh" /usr/local/bin/menu_xui.sh
+ln -sf "$TARGET_DIR/menu_telemt.sh" /usr/local/bin/menu_telemt.sh
 ln -sf "$TARGET_DIR/menu_tests.sh" /usr/local/bin/menu_tests.sh
 ln -sf "$TARGET_DIR/menu_setup.sh" /usr/local/bin/menu_setup.sh
 ln -sf "$TARGET_DIR/menu_warp.sh" /usr/local/bin/menu_warp.sh
 ln -sf "$TARGET_DIR/ipv6-menu" /usr/local/bin/ipv6-menu
 ln -sf "$TARGET_DIR/menu_utils.sh" /usr/local/bin/menu_utils.sh
 ln -sf "$TARGET_DIR/censorcheck.sh" /usr/local/bin/censorcheck.sh
+ln -sf "$TARGET_DIR/telemt-stack.sh" /usr/local/bin/telemt-stack.sh
+ln -sf "$TARGET_DIR/rebuild-nginx-openssl35.sh" /usr/local/bin/rebuild-nginx-openssl35.sh
     chmod +x "$TARGET_DIR/ipv6-menu"
 
 # Убираем ссылки на упразднённые модули (Hysteria2, MTProxy), если остались от старой версии
